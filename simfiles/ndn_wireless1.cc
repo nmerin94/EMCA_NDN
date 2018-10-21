@@ -121,9 +121,9 @@ main(int argc, char* argv[])
   ndnHelper.Install(nodes);
 
 
-  ndn::GlobalRoutingHelper ndnGlobalRoutingHelper;
+  /*ndn::GlobalRoutingHelper ndnGlobalRoutingHelper;
   ndnGlobalRoutingHelper.Install(nodes);
-  // Set BestRoute strategy
+  */
   // Set BestRoute strategy
   ndn::StrategyChoiceHelper::Install(nodes, "/", "/localhost/nfd/strategy/best-route");
 
@@ -136,7 +136,7 @@ main(int argc, char* argv[])
   consumerHelper.SetAttribute("Frequency", DoubleValue(10.0));
   consumerHelper.Install(nodes.Get(0));
 
-  ndnGlobalRoutingHelper.AddOrigins("/test/prefix", nodes.Get(4));
+  
   ndn::AppHelper producerHelper("ns3::ndn::Producer");
   producerHelper.SetPrefix("/test");
   producerHelper.SetAttribute("PayloadSize", StringValue("1200"));
@@ -148,20 +148,22 @@ main(int argc, char* argv[])
   relay.Install(nodes.Get(3));
   
   //Calculate routes for FIB
+  /*
+  ndnGlobalRoutingHelper.AddOriginsForAll();
+  ndnGlobalRoutingHelper.AddOrigins("/test/prefix", nodes.Get(4));
   
-  ndnGlobalRoutingHelper.Install(nodes);
   ndn::GlobalRoutingHelper::CalculateRoutes();
   ////////////////
-
+*/
   Simulator::Stop(Seconds(30.0));
 
  
   AnimationInterface anim ("ndn_wireless1_NetAnimationOutput.xml");
-  anim.SetConstantPosition (nodes.Get(0), 0, 0);
-  anim.SetConstantPosition (nodes.Get(1), 10, 0);
+  anim.SetConstantPosition (nodes.Get(0), 0, 5);
+  anim.SetConstantPosition (nodes.Get(1), 10, 5);
   anim.SetConstantPosition (nodes.Get(2), 10, 20);
-  anim.SetConstantPosition (nodes.Get(3), 30, 30);
-  anim.SetConstantPosition (nodes.Get(4), 45, 5);
+  anim.SetConstantPosition (nodes.Get(3), 20, 5);
+  anim.SetConstantPosition (nodes.Get(4), 150, 30);
 
   Simulator::Run();
   Simulator::Destroy();

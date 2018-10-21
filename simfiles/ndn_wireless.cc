@@ -61,8 +61,8 @@ main(int argc, char* argv[])
   YansWifiChannelHelper wifiChannel; // = YansWifiChannelHelper::Default ();
   wifiChannel.SetPropagationDelay("ns3::ConstantSpeedPropagationDelayModel");
   //wifiChannel.AddPropagationLoss("ns3::ThreeLogDistancePropagationLossModel");
-  //wifiChannel.AddPropagationLoss("ns3::NakagamiPropagationLossModel");
-  wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (2.8));
+  wifiChannel.AddPropagationLoss("ns3::NakagamiPropagationLossModel");
+  //wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (2.8));
   // YansWifiPhy wifiPhy = YansWifiPhy::Default();
   YansWifiPhyHelper wifiPhyHelper = YansWifiPhyHelper::Default();
   wifiPhyHelper.SetChannel(wifiChannel.Create());
@@ -72,7 +72,7 @@ main(int argc, char* argv[])
   NqosWifiMacHelper wifiMacHelper = NqosWifiMacHelper::Default();
   wifiMacHelper.SetType("ns3::AdhocWifiMac");
 
- /* Ptr<UniformRandomVariable> randomizer = CreateObject<UniformRandomVariable>();
+  Ptr<UniformRandomVariable> randomizer = CreateObject<UniformRandomVariable>();
   randomizer->SetAttribute("Min", DoubleValue(10));
   randomizer->SetAttribute("Max", DoubleValue(100));
 
@@ -81,7 +81,7 @@ main(int argc, char* argv[])
                                 "Y", PointerValue(randomizer), "Z", PointerValue(randomizer));
 
   mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-*/
+
     // set mobility
   MobilityHelper mobilitas;
   ObjectFactory pos;
@@ -103,8 +103,8 @@ main(int argc, char* argv[])
   NetDeviceContainer wifiNetDevices = wifi.Install(wifiPhyHelper, wifiMacHelper, nodes);
 
   // 2. Install Mobility model
-  //mobility.Install(nodes);
-  mobilitas.Install(nodes);
+  mobility.Install(nodes);
+  //mobilitas.Install(nodes);
 
 
   // 3. Install NDN stack
