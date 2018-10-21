@@ -62,7 +62,7 @@ main(int argc, char* argv[])
   wifiChannel.SetPropagationDelay("ns3::ConstantSpeedPropagationDelayModel");
   //wifiChannel.AddPropagationLoss("ns3::ThreeLogDistancePropagationLossModel");
   //wifiChannel.AddPropagationLoss("ns3::NakagamiPropagationLossModel");
-  wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (2.8));
+  wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (3));
   // YansWifiPhy wifiPhy = YansWifiPhy::Default();
   YansWifiPhyHelper wifiPhyHelper = YansWifiPhyHelper::Default();
   wifiPhyHelper.SetChannel(wifiChannel.Create());
@@ -72,7 +72,9 @@ main(int argc, char* argv[])
   NqosWifiMacHelper wifiMacHelper = NqosWifiMacHelper::Default();
   wifiMacHelper.SetType("ns3::AdhocWifiMac");
 
- /* Ptr<UniformRandomVariable> randomizer = CreateObject<UniformRandomVariable>();
+
+
+  Ptr<UniformRandomVariable> randomizer = CreateObject<UniformRandomVariable>();
   randomizer->SetAttribute("Min", DoubleValue(10));
   randomizer->SetAttribute("Max", DoubleValue(100));
 
@@ -81,7 +83,10 @@ main(int argc, char* argv[])
                                 "Y", PointerValue(randomizer), "Z", PointerValue(randomizer));
 
   mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-*/
+
+
+
+
     // set mobility
   MobilityHelper mobilitas;
   ObjectFactory pos;
@@ -103,56 +108,60 @@ main(int argc, char* argv[])
   NetDeviceContainer wifiNetDevices = wifi.Install(wifiPhyHelper, wifiMacHelper, nodes);
 
   // 2. Install Mobility model
-  //mobility.Install(nodes);
-  mobilitas.Install(nodes);
+  mobility.Install(nodes);
+  //mobilitas.Install(nodes.Get(2));
 
 
   // 3. Install NDN stack
   NS_LOG_INFO("Installing NDN stack");
   ndn::StackHelper ndnHelper;
-  // ndnHelper.AddNetDeviceFaceCreateCallback (WifiNetDevice::GetTypeId (), MakeCallback
-  // (MyNetDeviceFaceCallback));
+  //ndnHelper.AddNetDeviceFaceCreateCallback (WifiNetDevice::GetTypeId (), MakeCallback(MyNetDeviceFaceCallback));
   ndnHelper.SetOldContentStore("ns3::ndn::cs::Lru", "MaxSize", "1000");
   ndnHelper.SetDefaultRoutes(true);
   ndnHelper.Install(nodes);
 
+
+  ndn::GlobalRoutingHelper ndnGlobalRoutingHelper;
+  ndnGlobalRoutingHelper.Install(nodes);
   // Set BestRoute strategy
-  ndn::StrategyChoiceHelper::Install(nodes, "/", "/localhost/nfd/strategy/multicast");
+  // Set BestRoute strategy
+  ndn::StrategyChoiceHelper::Install(nodes, "/", "/localhost/nfd/strategy/best-route");
 
   // 4. Set up applications
   NS_LOG_INFO("Installing Applications");
 
-  //ndn::GlobalRoutingHelper ndnGlobalRoutingHelper;
-  //ndnGlobalRoutingHelper.Install(nodes);
-
-
-
-
+  
   ndn::AppHelper consumerHelper("ns3::ndn::ConsumerCbr");
-  //ndnGlobalRoutingHelper.AddOrigins("/test/prefix", nodes.Get(4));
   consumerHelper.SetPrefix("/test/prefix");
   consumerHelper.SetAttribute("Frequency", DoubleValue(10.0));
   consumerHelper.Install(nodes.Get(0));
 
+  ndnGlobalRoutingHelper.AddOrigins("/test/prefix", nodes.Get(4));
   ndn::AppHelper producerHelper("ns3::ndn::Producer");
-  //ndnGlobalRoutingHelper.AddOrigins("/test/prefix", nodes.Get(4));
   producerHelper.SetPrefix("/test");
   producerHelper.SetAttribute("PayloadSize", StringValue("1200"));
   producerHelper.Install(nodes.Get(4));
 
+  ndn::AppHelper relay("ns3::ndn::App");
+  relay.Install(nodes.Get(1));
+  relay.Install(nodes.Get(2));
+  relay.Install(nodes.Get(3));
+  
   //Calculate routes for FIB
-  //ndn::GlobalRoutingHelper::CalculateRoutes();
+  
+  ndnGlobalRoutingHelper.Install(nodes);
+  ndn::GlobalRoutingHelper::CalculateRoutes();
   ////////////////
 
   Simulator::Stop(Seconds(30.0));
 
  
-  AnimationInterface anim ("ndn_wireless_NetAnimationOutput.xml");
-  anim.SetConstantPosition (nodes.Get(0), 0, 5);
-  anim.SetConstantPosition (nodes.Get(1), 10, 5);
+  AnimationInterface anim ("ndn_wireless1_NetAnimationOutput.xml");
+  anim.SetConstantPosition (nodes.Get(0), 0, 0);
+  anim.SetConstantPosition (nodes.Get(1), 10, 0);
   anim.SetConstantPosition (nodes.Get(2), 10, 20);
-  anim.SetConstantPosition (nodes.Get(3), 20, 5);
-  anim.SetConstantPosition (nodes.Get(4), 150, 30);
+  anim.SetConstantPosition (nodes.Get(3), 30, 30);
+  anim.SetConstantPosition (nodes.Get(4), 45, 5);
 
   Simulator::Run();
   Simulator::Destroy();
