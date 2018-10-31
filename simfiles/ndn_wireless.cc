@@ -63,7 +63,7 @@ main(int argc, char* argv[])
   wifiChannel.SetPropagationDelay("ns3::ConstantSpeedPropagationDelayModel");
   //wifiChannel.AddPropagationLoss("ns3::ThreeLogDistancePropagationLossModel");
   //wifiChannel.AddPropagationLoss("ns3::NakagamiPropagationLossModel");
-  wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (2));
+  wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (3));
   // YansWifiPhy wifiPhy = YansWifiPhy::Default();
   YansWifiPhyHelper wifiPhyHelper = YansWifiPhyHelper::Default();
   wifiPhyHelper.SetPcapDataLinkType (YansWifiPhyHelper::DLT_IEEE802_11_RADIO);
@@ -139,7 +139,7 @@ main(int argc, char* argv[])
 
   
   consumerHelper.SetPrefix("/test/prefix");
-  consumerHelper.SetAttribute("Frequency", DoubleValue(10));
+  consumerHelper.SetAttribute("Frequency", DoubleValue(1));
   consumerHelper.Install(nodes.Get(0));
 
   ndn::AppHelper producerHelper("ns3::ndn::Producer");
