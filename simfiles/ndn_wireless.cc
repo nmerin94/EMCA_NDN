@@ -58,22 +58,24 @@ main(int argc, char* argv[])
   wifi.SetRemoteStationManager("ns3::ConstantRateWifiManager", "DataMode",
                                StringValue("OfdmRate24Mbps"));
 
+
   YansWifiChannelHelper wifiChannel; // = YansWifiChannelHelper::Default ();
   wifiChannel.SetPropagationDelay("ns3::ConstantSpeedPropagationDelayModel");
   //wifiChannel.AddPropagationLoss("ns3::ThreeLogDistancePropagationLossModel");
-  wifiChannel.AddPropagationLoss("ns3::NakagamiPropagationLossModel");
-  //wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (2.8));
+  //wifiChannel.AddPropagationLoss("ns3::NakagamiPropagationLossModel");
+  wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (2));
   // YansWifiPhy wifiPhy = YansWifiPhy::Default();
   YansWifiPhyHelper wifiPhyHelper = YansWifiPhyHelper::Default();
-  wifiPhyHelper.SetChannel(wifiChannel.Create());
+  wifiPhyHelper.SetPcapDataLinkType (YansWifiPhyHelper::DLT_IEEE802_11_RADIO);
   wifiPhyHelper.Set("TxPowerStart", DoubleValue(5));
   wifiPhyHelper.Set("TxPowerEnd", DoubleValue(5));
+  wifiPhyHelper.SetChannel(wifiChannel.Create());
 
   NqosWifiMacHelper wifiMacHelper = NqosWifiMacHelper::Default();
   wifiMacHelper.SetType("ns3::AdhocWifiMac");
 
   Ptr<UniformRandomVariable> randomizer = CreateObject<UniformRandomVariable>();
-  randomizer->SetAttribute("Min", DoubleValue(10));
+  randomizer->SetAttribute("Min", DoubleValue(0));
   randomizer->SetAttribute("Max", DoubleValue(100));
 
   MobilityHelper mobility;
@@ -86,11 +88,11 @@ main(int argc, char* argv[])
   MobilityHelper mobilitas;
   ObjectFactory pos;
   pos.SetTypeId("ns3::RandomRectanglePositionAllocator");
-  pos.Set ("X", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=500.0]"));
-  pos.Set ("Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=500.0]"));
+  pos.Set ("X", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=400.0]"));
+  pos.Set ("Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=400.0]"));
   Ptr<PositionAllocator> posAlloc = pos.Create()->GetObject<PositionAllocator>();
   mobilitas.SetMobilityModel("ns3::RandomWaypointMobilityModel", 
-                            "Speed", StringValue ("ns3::UniformRandomVariable[Min=0|Max=60]"),
+                            "Speed", StringValue ("ns3::UniformRandomVariable[Min=0|Max=70]"),
                             "Pause", StringValue ("ns3::ConstantRandomVariable[Constant=0.0]"),
                             "PositionAllocator", PointerValue(posAlloc));
   mobilitas.SetPositionAllocator (posAlloc);
@@ -103,9 +105,13 @@ main(int argc, char* argv[])
   NetDeviceContainer wifiNetDevices = wifi.Install(wifiPhyHelper, wifiMacHelper, nodes);
 
   // 2. Install Mobility model
+  /*mobility.Install(nodes.Get(0));
+  mobility.Install(nodes.Get(4));
+  mobilitas.Install(nodes.Get(1));
+  mobilitas.Install(nodes.Get(2));
+  mobilitas.Install(nodes.Get(3));
+  */
   mobility.Install(nodes);
-  //mobilitas.Install(nodes);
-
 
   // 3. Install NDN stack
   NS_LOG_INFO("Installing NDN stack");
@@ -122,16 +128,18 @@ main(int argc, char* argv[])
   // 4. Set up applications
   NS_LOG_INFO("Installing Applications");
 
-  //ndn::GlobalRoutingHelper ndnGlobalRoutingHelper;
-  //ndnGlobalRoutingHelper.Install(nodes);
-
-
+  ndn::GlobalRoutingHelper ndnGlobalRoutingHelper;
+  ndnGlobalRoutingHelper.Install(nodes);
+  ndnGlobalRoutingHelper.AddOrigins("/test", nodes.Get(4));
+  ndn::GlobalRoutingHelper::CalculateRoutes();
 
 
   ndn::AppHelper consumerHelper("ns3::ndn::ConsumerCbr");
-  //ndnGlobalRoutingHelper.AddOrigins("/test/prefix", nodes.Get(4));
+  ndn::AppHelper relayhelper("ns3::ndn::Relay");
+
+  
   consumerHelper.SetPrefix("/test/prefix");
-  consumerHelper.SetAttribute("Frequency", DoubleValue(10.0));
+  consumerHelper.SetAttribute("Frequency", DoubleValue(10));
   consumerHelper.Install(nodes.Get(0));
 
   ndn::AppHelper producerHelper("ns3::ndn::Producer");
@@ -139,20 +147,25 @@ main(int argc, char* argv[])
   producerHelper.SetPrefix("/test");
   producerHelper.SetAttribute("PayloadSize", StringValue("1200"));
   producerHelper.Install(nodes.Get(4));
+  relayhelper.SetPrefix("/test/prefix");
+  for(int i = 1; i < 4; i++){
+    relayhelper.Install(nodes.Get(i));
+  }
 
   //Calculate routes for FIB
-  //ndn::GlobalRoutingHelper::CalculateRoutes();
+  
   ////////////////
 
-  Simulator::Stop(Seconds(30.0));
+  Simulator::Stop(Seconds(10.0));
 
  
   AnimationInterface anim ("ndn_wireless_NetAnimationOutput.xml");
-  anim.SetConstantPosition (nodes.Get(0), 0, 5);
-  anim.SetConstantPosition (nodes.Get(1), 10, 5);
-  anim.SetConstantPosition (nodes.Get(2), 10, 20);
-  anim.SetConstantPosition (nodes.Get(3), 20, 5);
-  anim.SetConstantPosition (nodes.Get(4), 150, 30);
+  //anim.SetConstantPosition (nodes.Get(0), 0, 5);
+  //anim.SetConstantPosition (nodes.Get(1), 10, 5);
+  //anim.SetConstantPosition (nodes.Get(2), 10, 20);
+  //anim.SetConstantPosition (nodes.Get(3), 20, 5);
+  //anim.SetConstantPosition (nodes.Get(4), 20, 30);
+  anim.EnablePacketMetadata (true);
 
   Simulator::Run();
   Simulator::Destroy();

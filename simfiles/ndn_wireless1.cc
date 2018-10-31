@@ -109,7 +109,7 @@ main(int argc, char* argv[])
 
   // 2. Install Mobility model
   mobility.Install(nodes);
-  //mobilitas.Install(nodes.Get(2));
+  //mobilitas.Install(nodes);
 
 
   // 3. Install NDN stack
@@ -118,14 +118,18 @@ main(int argc, char* argv[])
   //ndnHelper.AddNetDeviceFaceCreateCallback (WifiNetDevice::GetTypeId (), MakeCallback(MyNetDeviceFaceCallback));
   ndnHelper.SetOldContentStore("ns3::ndn::cs::Lru", "MaxSize", "1000");
   ndnHelper.SetDefaultRoutes(true);
+  
   ndnHelper.Install(nodes);
+  ndn::StrategyChoiceHelper::Install(nodes, "/", "/localhost/nfd/strategy/multicast");
 
 
-  /*ndn::GlobalRoutingHelper ndnGlobalRoutingHelper;
+  ndn::GlobalRoutingHelper ndnGlobalRoutingHelper;
   ndnGlobalRoutingHelper.Install(nodes);
-  */
+  ndnGlobalRoutingHelper.AddOrigins("/test/prefix", nodes.Get(4));
+  ndn::GlobalRoutingHelper::CalculateRoutes();
+
   // Set BestRoute strategy
-  ndn::StrategyChoiceHelper::Install(nodes, "/", "/localhost/nfd/strategy/best-route");
+  
 
   // 4. Set up applications
   NS_LOG_INFO("Installing Applications");
@@ -142,10 +146,7 @@ main(int argc, char* argv[])
   producerHelper.SetAttribute("PayloadSize", StringValue("1200"));
   producerHelper.Install(nodes.Get(4));
 
-  ndn::AppHelper relay("ns3::ndn::App");
-  relay.Install(nodes.Get(1));
-  relay.Install(nodes.Get(2));
-  relay.Install(nodes.Get(3));
+  
   
   //Calculate routes for FIB
   /*
@@ -155,7 +156,7 @@ main(int argc, char* argv[])
   ndn::GlobalRoutingHelper::CalculateRoutes();
   ////////////////
 */
-  Simulator::Stop(Seconds(30.0));
+  Simulator::Stop(Seconds(3.0));
 
  
   AnimationInterface anim ("ndn_wireless1_NetAnimationOutput.xml");
@@ -163,7 +164,7 @@ main(int argc, char* argv[])
   anim.SetConstantPosition (nodes.Get(1), 10, 5);
   anim.SetConstantPosition (nodes.Get(2), 10, 20);
   anim.SetConstantPosition (nodes.Get(3), 20, 5);
-  anim.SetConstantPosition (nodes.Get(4), 150, 30);
+  anim.SetConstantPosition (nodes.Get(4), 10, 30);
 
   Simulator::Run();
   Simulator::Destroy();
