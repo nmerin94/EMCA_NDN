@@ -200,7 +200,8 @@ Strategy::sendData(const shared_ptr<pit::Entry>& pitEntry, const Data& data, con
   // delete the PIT entry's in-record based on outFace,
   // since Data is sent to outFace from which the Interest was received
   pitEntry->deleteInRecord(outFace);
-
+  NFD_LOG_DEBUG("Send DATA " << data.getName() <<
+                " to face " << outFace.getId());
   m_forwarder.onOutgoingData(data, *const_pointer_cast<Face>(outFace.shared_from_this()));
 }
 
@@ -210,13 +211,14 @@ Strategy::sendDataToAll(const shared_ptr<pit::Entry>& pitEntry, const Face& inFa
   std::set<Face*> pendingDownstreams;
   auto now = time::steady_clock::now();
 
+
   // remember pending downstreams
   for (const pit::InRecord& inRecord : pitEntry->getInRecords()) {
     if (inRecord.getExpiry() > now) {
-      if (inRecord.getFace().getId() == inFace.getId() &&
+     /* if (inRecord.getFace().getId() == inFace.getId() &&
           inRecord.getFace().getLinkType() != ndn::nfd::LINK_TYPE_AD_HOC) {
         continue;
-      } //////Restored Change
+      }*/
       pendingDownstreams.insert(&inRecord.getFace());
     }
   } 

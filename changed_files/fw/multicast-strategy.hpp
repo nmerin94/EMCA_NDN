@@ -59,11 +59,6 @@ public:
   beforeSatisfyInterest(const shared_ptr<pit::Entry>& pitEntry,
                         const Face& inFace, const Data& data) override;
 
-  void
-  sendData(const shared_ptr<pit::Entry>& pitEntry, const Data& data, const Face& outFace) override;
-
-  void
-  sendDataToAll(const shared_ptr<pit::Entry>& pitEntry, const Face& inFace, const Data& data) override;
 
 private:
   friend ProcessNackTraits<MulticastStrategy>;

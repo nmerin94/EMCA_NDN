@@ -383,7 +383,7 @@ protected: // accessors
   signal::Signal<FaceTable, Face&>& afterAddFace;
   signal::Signal<FaceTable, Face&>& beforeRemoveFace;
 
-private: // instance fields
+
   Name m_name;
 
   /** \brief reference to the forwarder
