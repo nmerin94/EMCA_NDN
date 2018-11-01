@@ -37,12 +37,14 @@ namespace nfd {
 
 NFD_LOG_INIT("Forwarder");
 
-static Name getDefaultStrategyName()
+static Name
+getDefaultStrategyName()
 {
   return fw::BestRouteStrategy2::getStrategyName();
 }
 
-Forwarder::Forwarder()  : m_unsolicitedDataPolicy(new fw::DefaultUnsolicitedDataPolicy())
+Forwarder::Forwarder()
+  : m_unsolicitedDataPolicy(new fw::DefaultUnsolicitedDataPolicy())
   , m_fib(m_nameTree)
   , m_pit(m_nameTree)
   , m_measurements(m_nameTree)
@@ -79,35 +81,38 @@ Forwarder::Forwarder()  : m_unsolicitedDataPolicy(new fw::DefaultUnsolicitedData
 
 Forwarder::~Forwarder() = default;
 
-void Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
+void
+Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
 {
   // receive Interest
-  NFD_LOG_DEBUG("onIncomingInterest face=" << inFace.getId() <<" interest=" << interest.getName());
+  NFD_LOG_DEBUG("onIncomingInterest face=" << inFace.getId() <<
+                " interest=" << interest.getName());
   interest.setTag(make_shared<lp::IncomingFaceIdTag>(inFace.getId()));
   ++m_counters.nInInterests;
 
   // /localhost scope control
-  bool isViolatingLocalhost = inFace.getScope() == ndn::nfd::FACE_SCOPE_NON_LOCAL && scope_prefix::LOCALHOST.isPrefixOf(interest.getName());
-  if (isViolatingLocalhost)
-  {
-    NFD_LOG_DEBUG("onIncomingInterest face=" << inFace.getId() <<" interest=" << interest.getName() << " violates /localhost");
+  bool isViolatingLocalhost = inFace.getScope() == ndn::nfd::FACE_SCOPE_NON_LOCAL &&
+                              scope_prefix::LOCALHOST.isPrefixOf(interest.getName());
+  if (isViolatingLocalhost) {
+    NFD_LOG_DEBUG("onIncomingInterest face=" << inFace.getId() <<
+                  " interest=" << interest.getName() << " violates /localhost");
     // (drop)
     return;
   }
 
   // detect duplicate Nonce with Dead Nonce List
   bool hasDuplicateNonceInDnl = m_deadNonceList.has(interest.getName(), interest.getNonce());
-  if (hasDuplicateNonceInDnl) 
-  {
+  if (hasDuplicateNonceInDnl) {
     // goto Interest loop pipeline
     this->onInterestLoop(inFace, interest);
     return;
   }
 
   // strip forwarding hint if Interest has reached producer region
-  if (!interest.getForwardingHint().empty() && m_networkRegionTable.isInProducerRegion(interest.getForwardingHint())) 
-  {
-    NFD_LOG_DEBUG("onIncomingInterest face=" << inFace.getId() <<" interest=" << interest.getName() << " reaching-producer-region");
+  if (!interest.getForwardingHint().empty() &&
+      m_networkRegionTable.isInProducerRegion(interest.getForwardingHint())) {
+    NFD_LOG_DEBUG("onIncomingInterest face=" << inFace.getId() <<
+                  " interest=" << interest.getName() << " reaching-producer-region");
     const_cast<Interest&>(interest).setForwardingHint({});
   }
 
@@ -117,69 +122,52 @@ void Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
   // detect duplicate Nonce in PIT entry
   int dnw = fw::findDuplicateNonce(*pitEntry, interest.getNonce(), inFace);
   bool hasDuplicateNonceInPit = dnw != fw::DUPLICATE_NONCE_NONE;
-  if (inFace.getLinkType() == ndn::nfd::LINK_TYPE_POINT_TO_POINT) 
-  {
+  if (inFace.getLinkType() == ndn::nfd::LINK_TYPE_POINT_TO_POINT) {
     // for p2p face: duplicate Nonce from same incoming face is not loop
     hasDuplicateNonceInPit = hasDuplicateNonceInPit && !(dnw & fw::DUPLICATE_NONCE_IN_SAME);
   }
-                   // MY-CODE
-    if (hasDuplicateNonceInPit) 
-    {
+  if (hasDuplicateNonceInPit) {
     // goto Interest loop pipeline
-      this->onInterestLoop(inFace, interest);
-      return;
-    }
-    /*else
-    {
-                  
-        inFace.sendInterest(interest);
-        NFD_LOG_DEBUG(interest << " from=" << inFace.getId()<< " pitEntry-to=" << inFace.getId()
-          <<"HAHHHA   AD_HOC Downstream LINKTYPE :"<<inFace.getLinkType());
-    }*/
-  
+    this->onInterestLoop(inFace, interest);
+    return;
+  }
 
   // is pending?
-  if (!pitEntry->hasInRecords()) 
-  {
-    if (m_csFromNdnSim == nullptr) 
-    {
-      m_cs.find(interest,bind(&Forwarder::onContentStoreHit, this, ref(inFace), pitEntry, _1, _2),bind(&Forwarder::onContentStoreMiss, this, ref(inFace), pitEntry, _1));
+  if (!pitEntry->hasInRecords()) {
+    if (m_csFromNdnSim == nullptr) {
+      m_cs.find(interest,
+                bind(&Forwarder::onContentStoreHit, this, ref(inFace), pitEntry, _1, _2),
+                bind(&Forwarder::onContentStoreMiss, this, ref(inFace), pitEntry, _1));
     }
-    else 
-    {
+    else {
       shared_ptr<Data> match = m_csFromNdnSim->Lookup(interest.shared_from_this());
-      if (match != nullptr) 
-      {
+      if (match != nullptr) {
         this->onContentStoreHit(inFace, pitEntry, interest, *match);
       }
-      else 
-      {
-
+      else {
         this->onContentStoreMiss(inFace, pitEntry, interest);
       }
     }
   }
-  else 
-  {
-
-
-
-
+  else {
     this->onContentStoreMiss(inFace, pitEntry, interest);
-
   }
 }
 
-void Forwarder::onInterestLoop(Face& inFace, const Interest& interest)
+void
+Forwarder::onInterestLoop(Face& inFace, const Interest& interest)
 {
   // if multi-access or ad hoc face, drop
-  if (inFace.getLinkType() != ndn::nfd::LINK_TYPE_POINT_TO_POINT) 
-  {
-    NFD_LOG_DEBUG("onInterestLoop face=" << inFace.getId() <<" interest=" << interest.getName() <<" drop");
+  if (inFace.getLinkType() != ndn::nfd::LINK_TYPE_POINT_TO_POINT) {
+    NFD_LOG_DEBUG("onInterestLoop face=" << inFace.getId() <<
+                  " interest=" << interest.getName() <<
+                  " drop");
     return;
   }
 
-  NFD_LOG_DEBUG("onInterestLoop face=" << inFace.getId() <<" interest=" << interest.getName() <<" send-Nack-duplicate");
+  NFD_LOG_DEBUG("onInterestLoop face=" << inFace.getId() <<
+                " interest=" << interest.getName() <<
+                " send-Nack-duplicate");
 
   // send Nack with reason=DUPLICATE
   // note: Don't enter outgoing Nack pipeline because it needs an in-record.
@@ -188,12 +176,15 @@ void Forwarder::onInterestLoop(Face& inFace, const Interest& interest)
   inFace.sendNack(nack);
 }
 
-static inline bool compare_InRecord_expiry(const pit::InRecord& a, const pit::InRecord& b)
+static inline bool
+compare_InRecord_expiry(const pit::InRecord& a, const pit::InRecord& b)
 {
   return a.getExpiry() < b.getExpiry();
 }
 
-void Forwarder::onContentStoreMiss(const Face& inFace, const shared_ptr<pit::Entry>& pitEntry, const Interest& interest)
+void
+Forwarder::onContentStoreMiss(const Face& inFace, const shared_ptr<pit::Entry>& pitEntry,
+                              const Interest& interest)
 {
   NFD_LOG_DEBUG("onContentStoreMiss interest=" << interest.getName());
   ++m_counters.nCsMisses;
@@ -208,12 +199,10 @@ void Forwarder::onContentStoreMiss(const Face& inFace, const shared_ptr<pit::Ent
 
   // has NextHopFaceId?
   shared_ptr<lp::NextHopFaceIdTag> nextHopTag = interest.getTag<lp::NextHopFaceIdTag>();
-  if (nextHopTag != nullptr) 
-  {
+  if (nextHopTag != nullptr) {
     // chosen NextHop face exists?
     Face* nextHopFace = m_faceTable.get(*nextHopTag);
-    if (nextHopFace != nullptr) 
-    {
+    if (nextHopFace != nullptr) {
       NFD_LOG_DEBUG("onContentStoreMiss interest=" << interest.getName() << " nexthop-faceid=" << nextHopFace->getId());
       // go to outgoing Interest pipeline
       // scope control is unnecessary, because privileged app explicitly wants to forward
@@ -221,25 +210,14 @@ void Forwarder::onContentStoreMiss(const Face& inFace, const shared_ptr<pit::Ent
     }
     return;
   }
-/*
-                 // MY-CODE
-                  if((inFace.getLinkType() == ndn::nfd::LINK_TYPE_AD_HOC))
-                  {
-                  
-                    inFace.sendInterest(interest);
-                    NFD_LOG_DEBUG(interest << " from=" << inFace.getId()
-                                           << " pitEntry-to=" << inFace.getId()<<"HAHHHA   AD_HOC Downstream");
-                  }
-
-      
-*/
-                  
 
   // dispatch to strategy: after incoming Interest
-  this->dispatchToStrategy(*pitEntry,[&] (fw::Strategy& strategy) { strategy.afterReceiveInterest(inFace, interest, pitEntry); });
+  this->dispatchToStrategy(*pitEntry,
+    [&] (fw::Strategy& strategy) { strategy.afterReceiveInterest(inFace, interest, pitEntry); });
 }
 
-void Forwarder::onContentStoreHit(const Face& inFace, const shared_ptr<pit::Entry>& pitEntry,
+void
+Forwarder::onContentStoreHit(const Face& inFace, const shared_ptr<pit::Entry>& pitEntry,
                              const Interest& interest, const Data& data)
 {
   NFD_LOG_DEBUG("onContentStoreHit interest=" << interest.getName());
@@ -391,15 +369,11 @@ Forwarder::onIncomingData(Face& inFace, const Data& data)
     }
 
     // foreach pending downstream
-
-
-    // CHANGED :P
     for (Face* pendingDownstream : pendingDownstreams) {
       /*if (pendingDownstream->getId() == inFace.getId() &&
           pendingDownstream->getLinkType() != ndn::nfd::LINK_TYPE_AD_HOC) {
         continue;
-      }
-      */
+      }*/
       // goto outgoing Data pipeline
       this->onOutgoingData(data, *pendingDownstream);
     }
@@ -410,7 +384,7 @@ void
 Forwarder::onDataUnsolicited(Face& inFace, const Data& data)
 {
   // accept to cache?
-  //fw::UnsolicitedDataDecision decision = m_unsolicitedDataPolicy->decide(inFace, data);
+  fw::UnsolicitedDataDecision decision = m_unsolicitedDataPolicy->decide(inFace, data);
   //if (decision == fw::UnsolicitedDataDecision::CACHE) {
     // CS insert
     if (m_csFromNdnSim == nullptr)
@@ -421,7 +395,7 @@ Forwarder::onDataUnsolicited(Face& inFace, const Data& data)
 
   NFD_LOG_DEBUG("onDataUnsolicited face=" << inFace.getId() <<
                 " data=" << data.getName() <<
-                " decision=" << "Added to CS");
+                "Cached");
 }
 
 void

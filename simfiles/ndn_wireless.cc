@@ -61,9 +61,9 @@ main(int argc, char* argv[])
 
   YansWifiChannelHelper wifiChannel; // = YansWifiChannelHelper::Default ();
   wifiChannel.SetPropagationDelay("ns3::ConstantSpeedPropagationDelayModel");
-  //wifiChannel.AddPropagationLoss("ns3::ThreeLogDistancePropagationLossModel");
-  //wifiChannel.AddPropagationLoss("ns3::NakagamiPropagationLossModel");
-  wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (3));
+  wifiChannel.AddPropagationLoss("ns3::ThreeLogDistancePropagationLossModel");
+  wifiChannel.AddPropagationLoss("ns3::NakagamiPropagationLossModel");
+  //wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (2));
   // YansWifiPhy wifiPhy = YansWifiPhy::Default();
   YansWifiPhyHelper wifiPhyHelper = YansWifiPhyHelper::Default();
   wifiPhyHelper.SetPcapDataLinkType (YansWifiPhyHelper::DLT_IEEE802_11_RADIO);
@@ -123,7 +123,10 @@ main(int argc, char* argv[])
   ndnHelper.Install(nodes);
 
   // Set BestRoute strategy
-  ndn::StrategyChoiceHelper::Install(nodes, "/", "/localhost/nfd/strategy/multicast");
+  for(int i = 1; i<4; i++)
+    ndn::StrategyChoiceHelper::Install(nodes.Get(i), "/", "/localhost/nfd/strategy/multicast");
+  ndn::StrategyChoiceHelper::Install(nodes.Get(1), "/", "/localhost/nfd/strategy/best-route");
+  ndn::StrategyChoiceHelper::Install(nodes.Get(4), "/", "/localhost/nfd/strategy/best-route");
 
   // 4. Set up applications
   NS_LOG_INFO("Installing Applications");
@@ -139,7 +142,7 @@ main(int argc, char* argv[])
 
   
   consumerHelper.SetPrefix("/test/prefix");
-  consumerHelper.SetAttribute("Frequency", DoubleValue(1));
+  consumerHelper.SetAttribute("Frequency", DoubleValue(100));
   consumerHelper.Install(nodes.Get(0));
 
   ndn::AppHelper producerHelper("ns3::ndn::Producer");
@@ -156,7 +159,7 @@ main(int argc, char* argv[])
   
   ////////////////
 
-  Simulator::Stop(Seconds(10.0));
+  Simulator::Stop(Seconds(3.0));
 
  
   AnimationInterface anim ("ndn_wireless_NetAnimationOutput.xml");

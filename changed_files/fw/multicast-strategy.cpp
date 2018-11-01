@@ -84,7 +84,7 @@ MulticastStrategy::afterReceiveInterest(const Face& inFace, const Interest& inte
 
   int nEligibleNextHops = 0;
 
-  bool isSuppressed = false;
+  //bool isSuppressed = false;
 
   for (const auto& nexthop : nexthops) {
     Face& outFace = nexthop.getFace();
@@ -94,7 +94,7 @@ MulticastStrategy::afterReceiveInterest(const Face& inFace, const Interest& inte
     if (suppressResult == RetxSuppressionResult::SUPPRESS) {
       NFD_LOG_DEBUG(interest << " from=" << inFace.getId()
                     << "to=" << outFace.getId() << " suppressed");
-      isSuppressed = true;
+      //isSuppressed = true;
       continue;
     }
 
@@ -160,7 +160,7 @@ MulticastStrategy::afterContentStoreHit(const shared_ptr<pit::Entry>& pitEntry,
                        const Face& inFace, const Data& data)
 {
   NFD_LOG_DEBUG(data.getName() << " to =" << inFace.getId()<<"After ContentStoreHit");
-  sendDataToAll(pitEntry, inFace, data);
+  sendData(pitEntry, data, inFace);
                           
 
 }

@@ -211,7 +211,8 @@ Strategy::sendDataToAll(const shared_ptr<pit::Entry>& pitEntry, const Face& inFa
   std::set<Face*> pendingDownstreams;
   auto now = time::steady_clock::now();
 
-
+  NFD_LOG_DEBUG("Send DATA to all " << data.getName() <<
+                " to face " << inFace.getId());
   // remember pending downstreams
   for (const pit::InRecord& inRecord : pitEntry->getInRecords()) {
     if (inRecord.getExpiry() > now) {
