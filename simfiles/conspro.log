@@ -1,0 +1,250 @@
+Waf: Entering directory `/home/nisha/ndnSIM/ns-3/build'
+Waf: Leaving directory `/home/nisha/ndnSIM/ns-3/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (2.810s)
++0.000000000s -1 ndn.Consumer:Consumer()
++0.000000000s -1 ndn.Producer:Producer()
++0.000000000s -1 ndn.Relay:Relay()
++0.000000000s -1 ndn.Relay:Relay()
++0.000000000s -1 ndn.Relay:Relay()
++0.000000000s 0 ndn.Consumer:StartApplication()
++0.000000000s 1 ndn.Relay:StartApplication()
++0.000000000s 2 ndn.Relay:StartApplication()
++0.000000000s 3 ndn.Relay:StartApplication()
++0.000000000s 4 ndn.Producer:StartApplication()
++0.000000000s 0 ndn.Consumer:SendPacket()
++0.000000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 0
++0.000000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 0 with +0.0ns. already 0 items
++0.000786282s 4 ndn.Producer:OnInterest(0x2052400, 0x2087070)
++0.000786282s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%00
++0.004860846s 0 ndn.Consumer:OnData(0x204d620, 0x206c390)
++0.004860846s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 0
++0.004860846s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++0.100000000s 0 ndn.Consumer:SendPacket()
++0.100000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 1
++0.100000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 1 with +100000000.0ns. already 0 items
++0.100427188s 4 ndn.Producer:OnInterest(0x2052400, 0x20cf550)
++0.100427188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%01
++0.108031128s 0 ndn.Consumer:OnData(0x204d620, 0x205d570)
++0.108031128s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 1
++0.108031128s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++0.200000000s 0 ndn.Consumer:SendPacket()
++0.200000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 2
++0.200000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 2 with +200000000.0ns. already 0 items
++0.200562188s 4 ndn.Producer:OnInterest(0x2052400, 0x20d62b0)
++0.200562188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%02
++0.207939504s 0 ndn.Consumer:OnData(0x204d620, 0x205d570)
++0.207939504s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 2
++0.207939504s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 2
++0.300000000s 0 ndn.Consumer:SendPacket()
++0.300000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 3
++0.300000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 3 with +300000000.0ns. already 0 items
++0.300924376s 4 ndn.Producer:OnInterest(0x2052400, 0x20ddb70)
++0.300924376s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%03
++0.306741222s 0 ndn.Consumer:OnData(0x204d620, 0x20e05a0)
++0.306741222s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 3
++0.306741222s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 3
++0.400000000s 0 ndn.Consumer:SendPacket()
++0.400000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 4
++0.400000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 4 with +400000000.0ns. already 0 items
++0.400418188s 4 ndn.Producer:OnInterest(0x2052400, 0x20e43d0)
++0.400418188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%04
++0.405934940s 0 ndn.Consumer:OnData(0x204d620, 0x20e7050)
++0.405934940s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 4
++0.405934940s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++0.500000000s 0 ndn.Consumer:SendPacket()
++0.500000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 5
++0.500000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 5 with +500000000.0ns. already 0 items
++0.500490188s 4 ndn.Producer:OnInterest(0x2052400, 0x20e8f10)
++0.500490188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%05
++0.504774940s 0 ndn.Consumer:OnData(0x204d620, 0x20ec0b0)
++0.504774940s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 5
++0.504774940s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 3
++0.600000000s 0 ndn.Consumer:SendPacket()
++0.600000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 6
++0.600000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 6 with +600000000.0ns. already 0 items
++0.600662282s 4 ndn.Producer:OnInterest(0x2052400, 0x20edf00)
++0.600662282s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%06
++0.611400162s 0 ndn.Consumer:OnData(0x204d620, 0x20f1500)
++0.611400162s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 6
++0.611400162s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 2
++0.700000000s 0 ndn.Consumer:SendPacket()
++0.700000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 7
++0.700000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 7 with +700000000.0ns. already 0 items
++0.700535188s 4 ndn.Producer:OnInterest(0x2052400, 0x20f3400)
++0.700535188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%07
++0.704516564s 0 ndn.Consumer:OnData(0x204d620, 0x20f5fd0)
++0.704516564s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 7
++0.704516564s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++0.800000000s 0 ndn.Consumer:SendPacket()
++0.800000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 8
++0.800000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 8 with +800000000.0ns. already 0 items
++0.800400188s 4 ndn.Producer:OnInterest(0x2052400, 0x20f8840)
++0.800400188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%08
++0.805120128s 0 ndn.Consumer:OnData(0x204d620, 0x20f8a70)
++0.805120128s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 8
++0.805120128s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++0.900000000s 0 ndn.Consumer:SendPacket()
++0.900000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 9
++0.900000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 9 with +900000000.0ns. already 0 items
++0.900454188s 4 ndn.Producer:OnInterest(0x2052400, 0x20fe4d0)
++0.900454188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%09
++0.905923940s 0 ndn.Consumer:OnData(0x204d620, 0x2100cc0)
++0.905923940s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 9
++0.905923940s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++1.000000000s 0 ndn.Consumer:SendPacket()
++1.000000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 10
++1.000000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 10 with +1000000000.0ns. already 0 items
++1.000607188s 4 ndn.Producer:OnInterest(0x2052400, 0x2102800)
++1.000607188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%0A
++1.007084034s 0 ndn.Consumer:OnData(0x204d620, 0x2105930)
++1.007084034s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 10
++1.007084034s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++1.100000000s 0 ndn.Consumer:SendPacket()
++1.100000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 11
++1.100000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 11 with +1100000000.0ns. already 0 items
++1.100328188s 4 ndn.Producer:OnInterest(0x2052400, 0x2107820)
++1.100328188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%0B
++1.110355880s 0 ndn.Consumer:OnData(0x204d620, 0x210a070)
++1.110355880s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 11
++1.110355880s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++1.200000000s 0 ndn.Consumer:SendPacket()
++1.200000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 12
++1.200000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 12 with +1200000000.0ns. already 0 items
++1.200555282s 4 ndn.Producer:OnInterest(0x2052400, 0x210cce0)
++1.200555282s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%0C
++1.210853974s 0 ndn.Consumer:OnData(0x204d620, 0x2113f40)
++1.210853974s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 12
++1.210853974s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++1.300000000s 0 ndn.Consumer:SendPacket()
++1.300000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 13
++1.300000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 13 with +1300000000.0ns. already 0 items
++1.300418188s 4 ndn.Producer:OnInterest(0x2052400, 0x2111330)
++1.300418188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%0D
++1.305237846s 0 ndn.Consumer:OnData(0x204d620, 0x2113f40)
++1.305237846s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 13
++1.305237846s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++1.400000000s 0 ndn.Consumer:SendPacket()
++1.400000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 14
++1.400000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 14 with +1400000000.0ns. already 0 items
++1.400689282s 4 ndn.Producer:OnInterest(0x2052400, 0x2117c10)
++1.400689282s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%0E
++1.404941752s 0 ndn.Consumer:OnData(0x204d620, 0x211af00)
++1.404941752s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 14
++1.404941752s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++1.500000000s 0 ndn.Consumer:SendPacket()
++1.500000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 15
++1.500000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 15 with +1500000000.0ns. already 0 items
++1.500364188s 4 ndn.Producer:OnInterest(0x2052400, 0x211cdd0)
++1.500364188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%0F
++1.502488470s 0 ndn.Consumer:OnData(0x204d620, 0x211db90)
++1.502488470s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 15
++1.502488470s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++1.600000000s 0 ndn.Consumer:SendPacket()
++1.600000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 16
++1.600000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 16 with +1600000000.0ns. already 0 items
++1.601113376s 4 ndn.Producer:OnInterest(0x2052400, 0x21222d0)
++1.601113376s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%10
++1.606636940s 0 ndn.Consumer:OnData(0x204d620, 0x211c8d0)
++1.606636940s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 16
++1.606636940s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++1.700000000s 0 ndn.Consumer:SendPacket()
++1.700000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 17
++1.700000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 17 with +1700000000.0ns. already 0 items
++1.700824282s 4 ndn.Producer:OnInterest(0x2052400, 0x21262f0)
++1.700824282s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%11
++1.714941350s 0 ndn.Consumer:OnData(0x204d620, 0x212ad20)
++1.714941350s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 17
++1.714941350s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 3
++1.800000000s 0 ndn.Consumer:SendPacket()
++1.800000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 18
++1.800000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 18 with +1800000000.0ns. already 0 items
++1.800382188s 4 ndn.Producer:OnInterest(0x2052400, 0x212cf20)
++1.800382188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%12
++1.806788410s 0 ndn.Consumer:OnData(0x204d620, 0x212fbf0)
++1.806788410s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 18
++1.806788410s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 2
++1.900000000s 0 ndn.Consumer:SendPacket()
++1.900000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 19
++1.900000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 19 with +1900000000.0ns. already 0 items
++1.900779282s 4 ndn.Producer:OnInterest(0x2052400, 0x21329b0)
++1.900779282s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%13
++1.904913846s 0 ndn.Consumer:OnData(0x204d620, 0x21337b0)
++1.904913846s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 19
++1.904913846s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++2.000000000s 0 ndn.Consumer:SendPacket()
++2.000000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 20
++2.000000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 20 with +2000000000.0ns. already 0 items
++2.000743282s 4 ndn.Producer:OnInterest(0x2052400, 0x2136020)
++2.000743282s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%14
++2.010663692s 0 ndn.Consumer:OnData(0x204d620, 0x2137c20)
++2.010663692s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 20
++2.010663692s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++2.100000000s 0 ndn.Consumer:SendPacket()
++2.100000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 21
++2.100000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 21 with +2100000000.0ns. already 0 items
++2.100671282s 4 ndn.Producer:OnInterest(0x2052400, 0x213cae0)
++2.100671282s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%15
++2.107293316s 0 ndn.Consumer:OnData(0x204d620, 0x21328c0)
++2.107293316s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 21
++2.107293316s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++2.200000000s 0 ndn.Consumer:SendPacket()
++2.200000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 22
++2.200000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 22 with +2200000000.0ns. already 0 items
++2.200716282s 4 ndn.Producer:OnInterest(0x2052400, 0x2140f30)
++2.200716282s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%16
++2.206095222s 0 ndn.Consumer:OnData(0x204d620, 0x2140fe0)
++2.206095222s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 22
++2.206095222s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++2.300000000s 0 ndn.Consumer:SendPacket()
++2.300000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 23
++2.300000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 23 with +2300000000.0ns. already 0 items
++2.300490188s 4 ndn.Producer:OnInterest(0x2052400, 0x2146450)
++2.300490188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%17
++2.400000000s 0 ndn.Consumer:SendPacket()
++2.400000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 24
++2.400000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 24 with +2400000000.0ns. already 1 items
++2.400517188s 4 ndn.Producer:OnInterest(0x2052400, 0x214b3c0)
++2.400517188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%18
++2.405738940s 0 ndn.Consumer:OnData(0x204d620, 0x2149da0)
++2.405738940s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 24
++2.405738940s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 2
++2.500000000s 0 ndn.Consumer:SendPacket()
++2.500000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 25
++2.500000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 25 with +2500000000.0ns. already 1 items
++2.500000000s -1 ndn.Consumer:OnTimeout(23)
++2.500734282s 4 ndn.Producer:OnInterest(0x2052400, 0x214fed0)
++2.500734282s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%19
++2.506821034s 0 ndn.Consumer:OnData(0x204d620, 0x214fff0)
++2.506821034s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 25
++2.506821034s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 3
++2.600000000s 0 ndn.Consumer:SendPacket()
++2.600000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 23
++2.600000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 23 with +2600000000.0ns. already 0 items
++2.600673094s 0 ndn.Consumer:OnData(0x204d620, 0x214fff0)
++2.600673094s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 23
++2.600673094s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 1
++2.700000000s 0 ndn.Consumer:SendPacket()
++2.700000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 26
++2.700000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 26 with +2700000000.0ns. already 0 items
++2.700761282s 4 ndn.Producer:OnInterest(0x2052400, 0x2155190)
++2.700761282s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%1A
++2.705130846s 0 ndn.Consumer:OnData(0x204d620, 0x214fff0)
++2.705130846s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 26
++2.705130846s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++2.800000000s 0 ndn.Consumer:SendPacket()
++2.800000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 27
++2.800000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 27 with +2800000000.0ns. already 0 items
++2.800925376s 4 ndn.Producer:OnInterest(0x2052400, 0x215a9c0)
++2.800925376s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%1B
++2.806206504s 0 ndn.Consumer:OnData(0x204d620, 0x215a6e0)
++2.806206504s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 27
++2.806206504s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
++2.900000000s 0 ndn.Consumer:SendPacket()
++2.900000000s 0 ndn.Consumer:SendPacket(): [INFO ] > Interest for 28
++2.900000000s 0 ndn.Consumer:WillSendOutInterest(): [DEBUG] Trying to add 28 with +2900000000.0ns. already 0 items
++2.900373188s 4 ndn.Producer:OnInterest(0x2052400, 0x215f650)
++2.900373188s 4 ndn.Producer:OnInterest(): [INFO ] node(4) responding with Data: /test/prefix/%FE%1C
++2.909365692s 0 ndn.Consumer:OnData(0x204d620, 0x215a6e0)
++2.909365692s 0 ndn.Consumer:OnData(): [INFO ] < DATA for 28
++2.909365692s 0 ndn.Consumer:OnData(): [DEBUG] Hop count: 4
