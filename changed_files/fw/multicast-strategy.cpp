@@ -85,18 +85,18 @@ MulticastStrategy::afterReceiveInterest(const Face& inFace, const Interest& inte
   int nEligibleNextHops = 0;
 
   //bool isSuppressed = false;
-
+  //NFD_LOG_DEBUG("in Face-type = "<<inFace.getLinkType());
   for (const auto& nexthop : nexthops) {
     Face& outFace = nexthop.getFace();
 
     RetxSuppressionResult suppressResult = m_retxSuppression.decidePerUpstream(*pitEntry, outFace);
-
-    if (suppressResult == RetxSuppressionResult::SUPPRESS) {
+    
+    /*if (suppressResult == RetxSuppressionResult::SUPPRESS) {
       NFD_LOG_DEBUG(interest << " from=" << inFace.getId()
                     << "to=" << outFace.getId() << " suppressed");
       //isSuppressed = true;
       continue;
-    }
+    }*/
 
     /*if ((outFace.getId() == inFace.getId() && outFace.getLinkType() != ndn::nfd::LINK_TYPE_AD_HOC) ||
         wouldViolateScope(inFace, interest, outFace)) {
@@ -114,14 +114,7 @@ MulticastStrategy::afterReceiveInterest(const Face& inFace, const Interest& inte
     }
     ++nEligibleNextHops;
   }
-  /*if((inFace.getLinkType() == ndn::nfd::LINK_TYPE_AD_HOC))
-  {
-    
-    this->sendInterest(pitEntry, inFace, interest); 
-    NFD_LOG_DEBUG(interest << " from=" << inFace.getId()
-                           << " pitEntry-to=" << inFace.getId()<<"Downstream AD-HOC");
-  }
-  */
+  
   /*if (nEligibleNextHops == 0 && !isSuppressed && (inFace.getLinkType() != ndn::nfd::LINK_TYPE_AD_HOC)) {
     NFD_LOG_DEBUG(interest << " from=" << inFace.getId() << " noNextHop");
 

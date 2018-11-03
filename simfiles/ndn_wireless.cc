@@ -61,9 +61,9 @@ main(int argc, char* argv[])
 
   YansWifiChannelHelper wifiChannel; // = YansWifiChannelHelper::Default ();
   wifiChannel.SetPropagationDelay("ns3::ConstantSpeedPropagationDelayModel");
-  wifiChannel.AddPropagationLoss("ns3::ThreeLogDistancePropagationLossModel");
-  wifiChannel.AddPropagationLoss("ns3::NakagamiPropagationLossModel");
-  //wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (2));
+  //wifiChannel.AddPropagationLoss("ns3::ThreeLogDistancePropagationLossModel");
+  //wifiChannel.AddPropagationLoss("ns3::NakagamiPropagationLossModel");
+  wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel","Exponent", DoubleValue (3));
   // YansWifiPhy wifiPhy = YansWifiPhy::Default();
   YansWifiPhyHelper wifiPhyHelper = YansWifiPhyHelper::Default();
   wifiPhyHelper.SetPcapDataLinkType (YansWifiPhyHelper::DLT_IEEE802_11_RADIO);
@@ -78,11 +78,23 @@ main(int argc, char* argv[])
   randomizer->SetAttribute("Min", DoubleValue(0));
   randomizer->SetAttribute("Max", DoubleValue(100));
 
-  MobilityHelper mobility;
+  /*MobilityHelper mobility;
   mobility.SetPositionAllocator("ns3::RandomBoxPositionAllocator", "X", PointerValue(randomizer),
                                 "Y", PointerValue(randomizer), "Z", PointerValue(randomizer));
 
   mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
+
+   */
+  MobilityHelper mobility;
+  Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
+  positionAlloc->Add (Vector (0.0, 0.0, 0.0));
+  positionAlloc->Add (Vector (10.0, 10.0, 0.0));
+  positionAlloc->Add (Vector (20.0, 20.0, 0.0));
+  positionAlloc->Add (Vector (30.0, 30.0, 0.0));
+  positionAlloc->Add (Vector (40.0, 40.0, 0.0));
+
+  mobility.SetPositionAllocator (positionAlloc);
+  mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
 
     // set mobility
   MobilityHelper mobilitas;
@@ -123,18 +135,19 @@ main(int argc, char* argv[])
   ndnHelper.Install(nodes);
 
   // Set BestRoute strategy
-  for(int i = 1; i<4; i++)
-    ndn::StrategyChoiceHelper::Install(nodes.Get(i), "/", "/localhost/nfd/strategy/multicast");
+  /*for(int i = 1; i<4; i++)
+   ndn::StrategyChoiceHelper::Install(nodes.Get(i), "/", "/localhost/nfd/strategy/multicast");
   ndn::StrategyChoiceHelper::Install(nodes.Get(1), "/", "/localhost/nfd/strategy/best-route");
   ndn::StrategyChoiceHelper::Install(nodes.Get(4), "/", "/localhost/nfd/strategy/best-route");
-
+  */
+   ndn::StrategyChoiceHelper::InstallAll("/","/localhost/nfd/strategy/multicast" );     //IF COMMENTED, INTEREST WONT PROPOGATE
   // 4. Set up applications
   NS_LOG_INFO("Installing Applications");
 
-  ndn::GlobalRoutingHelper ndnGlobalRoutingHelper;
+  /*ndn::GlobalRoutingHelper ndnGlobalRoutingHelper;
   ndnGlobalRoutingHelper.Install(nodes);
   ndnGlobalRoutingHelper.AddOrigins("/test", nodes.Get(4));
-  ndn::GlobalRoutingHelper::CalculateRoutes();
+  ndn::GlobalRoutingHelper::CalculateRoutes();*/
 
 
   ndn::AppHelper consumerHelper("ns3::ndn::ConsumerCbr");
@@ -142,7 +155,7 @@ main(int argc, char* argv[])
 
   
   consumerHelper.SetPrefix("/test/prefix");
-  consumerHelper.SetAttribute("Frequency", DoubleValue(100));
+  consumerHelper.SetAttribute("Frequency", DoubleValue(10));
   consumerHelper.Install(nodes.Get(0));
 
   ndn::AppHelper producerHelper("ns3::ndn::Producer");
@@ -158,17 +171,18 @@ main(int argc, char* argv[])
   //Calculate routes for FIB
   
   ////////////////
+  
 
   Simulator::Stop(Seconds(3.0));
 
- 
   AnimationInterface anim ("ndn_wireless_NetAnimationOutput.xml");
-  //anim.SetConstantPosition (nodes.Get(0), 0, 5);
-  //anim.SetConstantPosition (nodes.Get(1), 10, 5);
-  //anim.SetConstantPosition (nodes.Get(2), 10, 20);
-  //anim.SetConstantPosition (nodes.Get(3), 20, 5);
-  //anim.SetConstantPosition (nodes.Get(4), 20, 30);
-  anim.EnablePacketMetadata (true);
+  anim.SetConstantPosition (nodes.Get(0), 0, 0);
+  anim.SetConstantPosition (nodes.Get(1), 10, 10);
+  anim.SetConstantPosition (nodes.Get(2), 20, 20);
+  anim.SetConstantPosition (nodes.Get(3), 30, 30);
+  anim.SetConstantPosition (nodes.Get(4), 40, 40);
+  
+  //anim.EnablePacketMetadata (true);
 
   Simulator::Run();
   Simulator::Destroy();

@@ -60,7 +60,7 @@ Relay::StartApplication()
   NS_LOG_FUNCTION_NOARGS();
   App::StartApplication();
 
-  FibHelper::AddRoute(GetNode(), m_prefix, m_face, 0);
+  //FibHelper::AddRoute(GetNode(), m_prefix, m_face, 0);
 }
 void
 Relay::StopApplication()
@@ -73,12 +73,14 @@ Relay::StopApplication()
 void
 Relay::OnInterest(shared_ptr<const Interest> interest)
 {
+	if (!m_active)
+    return;
 	App::OnInterest(interest); // tracing inside
 
  	NS_LOG_FUNCTION(this << interest);
  	NS_LOG_INFO("> Interest recieved " << interest->getName());
- 	if (!m_active)
-    return;
+
+ 	
 	m_transmittedInterests(interest, this, m_face);
 
   	m_appLink->onReceiveInterest(*interest);
@@ -94,7 +96,7 @@ Relay::OnData(shared_ptr<const Data> data)
 
     App::OnData(data); // tracing inside
     NS_LOG_FUNCTION(this << data);
-	//FibHelper::AddRoute(GetNode(), data->getName().
+	//FibHelper::AddRoute(GetNode(), data.getName())
 	NS_LOG_INFO("node(" << GetNode()->GetId() << ") forwarding Data: " << data->getName());
 	/*auto hopCountTag = data->getTag<lp::HopCountTag>();
 	int HopCount = *hopCountTag + 1;
