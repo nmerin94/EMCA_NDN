@@ -125,17 +125,21 @@ namespace ns3 {
 		uint32_t mob = 1;  // Without Mobility
 		uint32_t n_nodes = 6;
 		uint32_t freq = 10;
+		uint32_t sim_time = 31;
 		// Getting Choice via Command line
 		/*
 		./waf --run "scratch/manet_ndn --PrintHelp" will print help.
 		To set mobility model as Random waypoint, use  
 		./waf --run "scratch/manet_ndn --mob=2"  
+		setting up other cmd arguments.
+		./waf --run "scratch/manet_ndn --mob=2 --n_nodes=7 --freq=10"
 		*/
 
 		CommandLine cmd;
 		cmd.AddValue("mob", "1: No Mobility, 2: Mobility", mob);
 		cmd.AddValue("n_nodes", "Number of nodes", n_nodes);
 		cmd.AddValue("freq", "Interest frequency", freq);
+		cmd.AddValue("sim_time", "Simulation Time", sim_time);
 		cmd.Parse (argc, argv);
 
 		nodes.Create(n_nodes);
@@ -185,7 +189,7 @@ namespace ns3 {
 		NS_LOG_INFO("Installing Applications");
 		buildapps(n_nodes, freq);
 
-		Simulator::Stop(Seconds(31.0));
+		Simulator::Stop(Seconds(sim_time));
 		AnimationInterface anim ("ndn_wireless_NetAnimationOutput.xml");
 		anim.SetConstantPosition(nodes.Get(0), 0, 15);
 		anim.SetConstantPosition (nodes.Get(1), 0, 0);
