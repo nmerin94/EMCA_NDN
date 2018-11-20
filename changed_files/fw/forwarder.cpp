@@ -128,9 +128,22 @@ Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
   }
   if (hasDuplicateNonceInPit) {
     // goto Interest loop pipeline
-    this->onInterestLoop(inFace, interest);
-    return;
-  }
+      this->onInterestLoop(inFace, interest);
+      return;
+    }
+    /*if (hasDuplicateNonceInPit) {
+    // goto Interest loop pipeline
+    NFD_LOG_DEBUG("Number of duplicate nonce = "<<dnw);
+    if(dnw<3){
+      pitEntry = m_pit.insert(interest).first;
+    }
+    else{
+      this->onInterestLoop(inFace, interest);
+      return;
+    }
+    */
+
+  
 
   // is pending?
   if (!pitEntry->hasInRecords()) {
@@ -171,7 +184,7 @@ Forwarder::onInterestLoop(Face& inFace, const Interest& interest)
   /*NFD_LOG_DEBUG("onInterestLoop face=" << inFace.getId() <<
                 " interest=" << interest.getName() <<
                 " send-Nack-duplicate");
-
+/*
   // send Nack with reason=DUPLICATE
   // note: Don't enter outgoing Nack pipeline because it needs an in-record.
   lp::Nack nack(interest);
@@ -307,8 +320,10 @@ Forwarder::onIncomingData(Face& inFace, const Data& data)
   dataCopyWithoutTag->removeTag<lp::HopCountTag>();
 
   // CS insert
+  NFD_LOG_DEBUG("Inserting into Content Store"<<data.getName());
   if (m_csFromNdnSim == nullptr)
     m_cs.insert(*dataCopyWithoutTag);
+
   else
     m_csFromNdnSim->Add(dataCopyWithoutTag);
 
@@ -389,17 +404,23 @@ Forwarder::onDataUnsolicited(Face& inFace, const Data& data)
 {
   // accept to cache?
   fw::UnsolicitedDataDecision decision = m_unsolicitedDataPolicy->decide(inFace, data);
-  //if (decision == fw::UnsolicitedDataDecision::CACHE) {
+  if (decision == fw::UnsolicitedDataDecision::CACHE) {
     // CS insert
     if (m_csFromNdnSim == nullptr)
       m_cs.insert(data, true);
     else
       m_csFromNdnSim->Add(data.shared_from_this());
-  //}
-
+  }
+/*
   NFD_LOG_DEBUG("onDataUnsolicited face=" << inFace.getId() <<
                 " data=" << data.getName() <<
-                "Cached");
+                " Cached");
+*/
+  
+  NFD_LOG_DEBUG("onDataUnsolicited face=" << inFace.getId() <<
+                " data=" << data.getName() <<
+                "decision"<<decision);
+  
 }
 
 void
