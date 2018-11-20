@@ -124,7 +124,7 @@ namespace ns3 {
  	{
 		uint32_t mob = 1;  // Without Mobility
 		uint32_t n_nodes = 6;
-		uint32_t freq = 10
+		uint32_t freq = 10;
 		// Getting Choice via Command line
 		/*
 		./waf --run "scratch/manet_ndn --PrintHelp" will print help.
