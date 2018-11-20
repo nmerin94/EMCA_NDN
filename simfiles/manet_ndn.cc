@@ -48,7 +48,7 @@ namespace ns3 {
 
 
 
-	void buildapps(uint32_t n_nodes)
+	void buildapps(uint32_t n_nodes, uint32_t freq)
 	{
 		NS_LOG_INFO("Installing Applications");
 		ndn::AppHelper consumerHelper("ns3::ndn::ConsumerCbr");
@@ -56,7 +56,7 @@ namespace ns3 {
 
   
 		consumerHelper.SetPrefix("/test/prefix");
-		consumerHelper.SetAttribute("Frequency", DoubleValue(10));
+		consumerHelper.SetAttribute("Frequency", DoubleValue(freq));
 		consumerHelper.Install(nodes.Get(0));
 		consumerHelper.Install(nodes.Get(1));
 		ndn::AppHelper producerHelper("ns3::ndn::Producer");
@@ -108,7 +108,7 @@ namespace ns3 {
 		Ptr<PositionAllocator> posAlloc = pos.Create()->GetObject<PositionAllocator>();
 		mobilitas.SetMobilityModel("ns3::RandomWaypointMobilityModel", 
                             "Speed", StringValue ("ns3::UniformRandomVariable[Min=10|Max=20]"),
-                            "Pause", StringValue ("ns3::ConstantRandomVariable[Constant=3.0]"),
+                            "Pause", StringValue ("ns3::ConstantRandomVariable[Constant=0.0]"),
                             "PositionAllocator", PointerValue(posAlloc));
   		mobilitas.SetPositionAllocator (posAlloc);
   		for(int i = 2; i < n_nodes - 1; i++)
@@ -124,6 +124,7 @@ namespace ns3 {
  	{
 		uint32_t mob = 1;  // Without Mobility
 		uint32_t n_nodes = 6;
+		uint32_t freq = 10
 		// Getting Choice via Command line
 		/*
 		./waf --run "scratch/manet_ndn --PrintHelp" will print help.
@@ -134,6 +135,7 @@ namespace ns3 {
 		CommandLine cmd;
 		cmd.AddValue("mob", "1: No Mobility, 2: Mobility", mob);
 		cmd.AddValue("n_nodes", "Number of nodes", n_nodes);
+		cmd.AddValue("freq", "Interest frequency", freq);
 		cmd.Parse (argc, argv);
 
 		nodes.Create(n_nodes);
@@ -181,13 +183,13 @@ namespace ns3 {
 		ndn::StrategyChoiceHelper::InstallAll("/","/localhost/nfd/strategy/multicast" );
 		// Install apps
 		NS_LOG_INFO("Installing Applications");
-		buildapps(n_nodes);
+		buildapps(n_nodes, freq);
 
-		Simulator::Stop(Seconds(30.0));
+		Simulator::Stop(Seconds(31.0));
 		AnimationInterface anim ("ndn_wireless_NetAnimationOutput.xml");
 		anim.SetConstantPosition(nodes.Get(0), 0, 15);
 		anim.SetConstantPosition (nodes.Get(1), 0, 0);
-		anim.SetConstantPosition (nodes.Get(5), 30, 30);
+		anim.SetConstantPosition (nodes.Get(n_nodes-1), 30, 30);
 		ndn::L3RateTracer::Install(nodes.Get(0), "rate-trace0.txt", Seconds(15));
 		ndn::L3RateTracer::Install(nodes.Get(1), "rate-trace1.txt", Seconds(15));
 		PcapWriter trace("ndn-simple-trace.pcap");
