@@ -120,29 +120,33 @@ Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
   shared_ptr<pit::Entry> pitEntry = m_pit.insert(interest).first;
 
   // detect duplicate Nonce in PIT entry
+
   int dnw = fw::findDuplicateNonce(*pitEntry, interest.getNonce(), inFace);
   bool hasDuplicateNonceInPit = dnw != fw::DUPLICATE_NONCE_NONE;
   if (inFace.getLinkType() == ndn::nfd::LINK_TYPE_POINT_TO_POINT) {
     // for p2p face: duplicate Nonce from same incoming face is not loop
     hasDuplicateNonceInPit = hasDuplicateNonceInPit && !(dnw & fw::DUPLICATE_NONCE_IN_SAME);
   }
-  if (hasDuplicateNonceInPit) {
+  /*if (hasDuplicateNonceInPit) {
     // goto Interest loop pipeline
       this->onInterestLoop(inFace, interest);
       return;
     }
-    /*if (hasDuplicateNonceInPit) {
-    // goto Interest loop pipeline
-    NFD_LOG_DEBUG("Number of duplicate nonce = "<<dnw);
-    if(dnw<3){
-      pitEntry = m_pit.insert(interest).first;
+  */
+    if (hasDuplicateNonceInPit) {
+    int dn = fw::findNumDuplicateNonce(*pitEntry, interest.getNonce(), inFace);
+    NFD_LOG_DEBUG( "Number of duplicate nonce = " << dn);
+    if(dnw < 3  &&  dn <= 2){
+      NFD_LOG_DEBUG("onIncomingInterest face=" << inFace.getId() <<
+                  " interest=" << interest.getName() << "Duplicate Interest on different face Saving for Broken Edges");
     }
     else{
       this->onInterestLoop(inFace, interest);
       return;
     }
-    */
-
+    
+  }
+  
   
 
   // is pending?
@@ -360,8 +364,15 @@ Forwarder::onIncomingData(Face& inFace, const Data& data)
     for (const shared_ptr<pit::Entry>& pitEntry : pitMatches) {
       NFD_LOG_DEBUG("onIncomingData matching=" << pitEntry->getName());
 
+      
       // remember pending downstreams
       for (const pit::InRecord& inRecord : pitEntry->getInRecords()) {
+
+        /*****************************************************************/
+          int dn = fw::findNumDuplicateNonce(*pitEntry, (inRecord.getInterest()).getNonce(), inRecord.getFace());
+          NFD_LOG_DEBUG("Number of faces with same nonce = " << dn);
+
+        /****************************************************************/
         if (inRecord.getExpiry() > now) {
           pendingDownstreams.insert(&inRecord.getFace());
         }

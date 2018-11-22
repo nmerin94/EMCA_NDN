@@ -24,11 +24,13 @@
  */
 
 #include "strategy.hpp"
+#include "algorithm.hpp"
 #include "forwarder.hpp"
 #include "core/logger.hpp"
 #include "core/random.hpp"
 #include <boost/range/adaptor/map.hpp>
 #include <boost/range/algorithm/copy.hpp>
+//#include "table/pit-in-record.hpp"
 
 namespace nfd {
 namespace fw {
@@ -215,6 +217,18 @@ Strategy::sendDataToAll(const shared_ptr<pit::Entry>& pitEntry, const Face& inFa
                 " to face " << inFace.getId());
   // remember pending downstreams
   for (const pit::InRecord& inRecord : pitEntry->getInRecords()) {
+        /*****************************************************************/
+          int dn = fw::findNumDuplicateNonce(*pitEntry, (inRecord.getInterest()).getNonce(), inRecord.getFace());
+          NFD_LOG_DEBUG("Number of faces with same nonce = " << dn);
+          if(dn > 0 && inRecord.getFace().getState() ==  nfd::face::TransportState::UP)
+          {
+            NFD_LOG_DEBUG("Face is UP, Deleting the 2nd face");
+            const pit::InRecord& extraRecord =fw::returnNextInRecord(*pitEntry, (inRecord.getInterest()).getNonce());
+           pitEntry->deleteInRecord(extraRecord.getFace());
+
+          }
+
+        /****************************************************************/
     if (inRecord.getExpiry() > now) {
      /* if (inRecord.getFace().getId() == inFace.getId() &&
           inRecord.getFace().getLinkType() != ndn::nfd::LINK_TYPE_AD_HOC) {

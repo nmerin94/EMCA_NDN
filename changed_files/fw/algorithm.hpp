@@ -102,9 +102,22 @@ enum DuplicateNonceWhere {
 int
 findDuplicateNonce(const pit::Entry& pitEntry, uint32_t nonce, const Face& face);
 
+/* My function to determine the number of duplicates*/
+
+
+int
+findNumDuplicateNonce(const pit::Entry& pitEntry, uint32_t nonce, const Face& face);
+
+
+/* My function to return the first duplicate pit entry with same nonce */
+const pit::InRecord&
+returnNextInRecord(const pit::Entry& pitEntry, uint32_t nonce);
+
+
 /** \brief determine whether \p pitEntry has any pending out-records
  *  \return true if there is at least one out-record waiting for Data
  */
+
 bool
 hasPendingOutRecords(const pit::Entry& pitEntry);
 

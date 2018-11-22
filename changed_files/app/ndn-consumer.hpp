@@ -139,9 +139,9 @@ protected:
   EventId m_sendEvent; ///< @brief EventId of pending "send packet" event
   Time m_retxTimer;    ///< @brief Currently estimated retransmission timer
   EventId m_retxEvent; ///< @brief Event to check whether or not retransmission should be performed
-
   Ptr<RttEstimator> m_rtt; ///< @brief RTT estimator
-
+  Time total_del;      // Total delay for interest
+  uint32_t sent_int;   // Total no of interests satisfied
   Time m_offTime;          ///< \brief Time interval between packets
   Name m_interestName;     ///< \brief NDN Name of the Interest (use Name)
   Time m_interestLifeTime; ///< \brief LifeTime for interest packet

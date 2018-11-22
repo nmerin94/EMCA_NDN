@@ -109,6 +109,39 @@ findDuplicateNonce(const pit::Entry& pitEntry, uint32_t nonce, const Face& face)
   return dnw;
 }
 
+// My function
+int
+findNumDuplicateNonce(const pit::Entry& pitEntry, uint32_t nonce, const Face& face)
+{
+  int dnw = 0;
+
+  for (const pit::InRecord& inRecord : pitEntry.getInRecords()) {
+    if (inRecord.getLastNonce() == nonce) {
+      if (&inRecord.getFace() != &face)
+        dnw = dnw + 1;
+    }
+  }
+
+  return dnw;
+}
+
+
+const pit::InRecord&
+returnNextInRecord(const pit::Entry& pitEntry, uint32_t nonce)
+{
+  int i = 0;
+  for(const pit::InRecord& inRecord : pitEntry.getInRecords())
+  {
+    if (inRecord.getLastNonce() == nonce){
+      i = i + 1;
+      if(i > 1)
+       return inRecord;
+
+    }
+
+  }
+}
+
 bool
 hasPendingOutRecords(const pit::Entry& pitEntry)
 {
